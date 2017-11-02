@@ -9,6 +9,11 @@ target 'WeatherApp' do
   
   pod 'Alamofire'
   pod 'AlamofireSwiftyJSON'
+  pod 'PromiseKit'
+  pod 'Fabric'
+  pod 'Crashlytics'
+  pod 'CocoaLumberjack/Swift'
+  pod 'Swinject'
 
   target 'WeatherAppTests' do
     inherit! :search_paths

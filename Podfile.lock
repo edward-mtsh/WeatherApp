@@ -22,6 +22,8 @@ PODS:
     - PromiseKit/CorePromise
   - SwiftyJSON (3.1.4)
   - Swinject (2.1.1)
+  - SwinjectStoryboard (1.1.2):
+    - Swinject (~> 2.1)
 
 DEPENDENCIES:
   - Alamofire
@@ -31,6 +33,7 @@ DEPENDENCIES:
   - Fabric
   - PromiseKit
   - Swinject
+  - SwinjectStoryboard
 
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
@@ -41,7 +44,8 @@ SPEC CHECKSUMS:
   PromiseKit: fbb52a0d154402c57eeb6eccd36dd7724fcf6117
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Swinject: afea49fd95f392b41171669f165842879c48fad6
+  SwinjectStoryboard: 92e75763c3299cdf627bef98a5180dc894864336
 
-PODFILE CHECKSUM: c61116fcad454d093ff6af87e7f15e3eefebb82a
+PODFILE CHECKSUM: 1ade0de001dd8a25cd31f3dbc0ec2ff387904bbb
 
 COCOAPODS: 1.3.1

@@ -12,7 +12,7 @@ import Crashlytics
 import PromiseKit
 import CocoaLumberjack
 
-class ViewController: BaseViewController, CLLocationManagerDelegate
+class LocationViewController: BaseViewController, CLLocationManagerDelegate
     {
     @IBOutlet private weak var _dateTimeLabel: UILabel!
     @IBOutlet private weak var _maxTemperatureLabel: UILabel!
@@ -23,6 +23,7 @@ class ViewController: BaseViewController, CLLocationManagerDelegate
     private var _locationManager:CLLocationManager?
     private var _latitude:String?
     private var _longitude:String?
+    internal var server:Server?
     
     override func viewDidLoad()
         {
@@ -102,12 +103,12 @@ class ViewController: BaseViewController, CLLocationManagerDelegate
             {
             _ -> Promise<ResponseData> in
             self.showBusyView()
-            return(Server.loadWeatherForCurrentLocation(latitude:latitude, longitude:longitude))
+            return(server?.loadWeatherForCurrentLocation(latitude:latitude, longitude:longitude))!
             }
         .then
             {
-            responseData -> Void in
-            self.pupulateUIView(response: responseData)
+            result -> Void in
+            self.pupulateUIView(response: result)
             }
         .always
             {

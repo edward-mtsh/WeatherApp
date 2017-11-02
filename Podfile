@@ -14,7 +14,8 @@ target 'WeatherApp' do
   pod 'Crashlytics'
   pod 'CocoaLumberjack/Swift'
   pod 'Swinject'
-
+  pod 'SwinjectStoryboard'
+  
   target 'WeatherAppTests' do
     inherit! :search_paths
     # Pods for testing

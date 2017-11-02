@@ -9,10 +9,11 @@
 import Foundation
 import Alamofire
 import AlamofireSwiftyJSON
-
+import PromiseKit
+import CocoaLumberjack
 /*
-I'm using this class to call the API server. Usually using the Swagger will eleminate all
-this value key code that i wrote. Going forward the swagger is the best approach for this, so that
+ I'm using this class to call the API server. Usually using the Swagger will eleminate all
+ this value key code that i wrote. Going forward the swagger is the best approach for this, so that
  the code will be much easier to maintain
  */
 
@@ -22,15 +23,16 @@ class Server: NSObject
     static let baseUrl = "http://api.openweathermap.org/data/2.5/"
     static let iconURL = "http://openweathermap.org/img/w/"
     
-    class func loadCurrentWeather(controller:BaseViewController, lat:String, lon:String, ok: @escaping (_ response:ResponseData) -> Void)
+    class func loadWeatherForCurrentLocation(latitude: String, longitude: String) -> Promise<ResponseData>
         {
+        let (promise, fulfill, reject) = Promise<ResponseData>.pending()
         let base = self.baseUrl
-        let path = "weather?lat=" + lat + "&lon=" + lon + "&units=metric&appid=" + self.weatherAPIKey
+        let path = "weather?lat=\(latitude)&lon=\(longitude)&units=metric&appid=\(self.weatherAPIKey)"
         let urlPath = base + path
-        controller.showBusyView()
         Alamofire.request(urlPath).responseSwiftyJSON
             {
             response in
+            DDLogInfo(response.debugDescription)
             if response.result.isSuccess
                 {
                 let result = response.result.value
@@ -56,17 +58,17 @@ class Server: NSObject
                     {
                     responseData.area = area
                     }
-                controller.hideBusyView()
-                ok(responseData)
+                fulfill(responseData)
                 }
             else
                 {
-                controller.onMainThread
+                if let error = response.error
                     {
-                    controller.hideBusyView()
-                    controller.showAlert(title: "Weather", message: "Something went wrong, please try again later")
+                    reject(error)
                     }
                 }
             }
+        return(promise)
         }
     }
+

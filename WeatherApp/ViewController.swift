@@ -8,6 +8,9 @@
 
 import UIKit
 import CoreLocation
+import Crashlytics
+import PromiseKit
+import CocoaLumberjack
 
 class ViewController: BaseViewController, CLLocationManagerDelegate
     {
@@ -38,7 +41,7 @@ class ViewController: BaseViewController, CLLocationManagerDelegate
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM yyyy"
         let formatedDate = formatter.string(from: date)
-        self._dateTimeLabel.text = "Today, " + formatedDate
+        self._dateTimeLabel.text = "Today, \(formatedDate)"
         }
     
     func requestAccessToLocation()
@@ -87,28 +90,52 @@ class ViewController: BaseViewController, CLLocationManagerDelegate
         {
         guard let latitude = self._latitude else
             {
+            DDLogError("Error: Latitude is empty")
             return
             }
         guard let longitude = self._longitude else
             {
+            DDLogError("Error: Logitude is empty")
             return
             }
-        Server.loadCurrentWeather(controller: self, lat:latitude, lon:longitude)
+        firstly
             {
-            responseData in
-            self._areaLabel.text = responseData.area
-            self._maxTemperatureLabel.text = "max " + responseData.maxTemparature + " °C"
-            self._minTemperatureLabel.text = "min " + responseData.minTemparature + " °C"
-            if let imageUrl = NSURL(string: responseData.iconURL) as? URL
-                {
-                guard let data = NSData(contentsOf:imageUrl) else
-                    {
-                    return
-                    }
-                self._weatherImage.image = UIImage(data:data as Data)
-                }
+            _ -> Promise<ResponseData> in
+            self.showBusyView()
+            return(Server.loadWeatherForCurrentLocation(latitude:latitude, longitude:longitude))
+            }
+        .then
+            {
+            responseData -> Void in
+            self.pupulateUIView(response: responseData)
+            }
+        .always
+            {
+            self.hideBusyView()
+            }
+        .catch
+            {
+            error in
+            self.showAlert(title: "Weather", message: "Something went wrong, please try again later")
             }
         }
+    
+    func pupulateUIView(response:ResponseData)
+        {
+        self._areaLabel.text = response.area
+        self._maxTemperatureLabel.text = "max \(response.maxTemparature) °C"
+        self._minTemperatureLabel.text = "min \(response.minTemparature) °C"
+        if let imageUrl = NSURL(string: response.iconURL) as URL?
+            {
+            guard let data = NSData(contentsOf:imageUrl) else
+                {
+                DDLogError("Weather Image icon is empty");
+                return
+                }
+            self._weatherImage.image = UIImage(data:data as Data)
+            }
+        }
+    
     @IBAction func onRefreshTapped(_ sender: Any)
         {
         self.requestAccessToLocation()

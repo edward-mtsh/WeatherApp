@@ -37,31 +37,16 @@ class Server: NSObject
                         fulfill(result)
                         }
                     }
+                if let error = response.error
+                    {
+                    reject(error)
+                    }
                 }
             else
                 {
                 if let error = response.error
                     {
                     reject(error)
-                    }
-                }
-            }
-        return(promise)
-        }
-    
-    func loadWeatherImage(iconName:String) -> Promise<UIImage>
-        {
-        let (promise, fulfill, reject) = Promise<UIImage>.pending()
-        let baseURL = iconURL
-        let path = iconName
-        let urlPath = baseURL + path
-        if let imageUrl = NSURL(string: urlPath) as URL?
-            {
-            if let data = NSData(contentsOf:imageUrl)
-                {
-                if let image = UIImage(data:data as Data)
-                    {
-                    fulfill(image)
                     }
                 }
             }

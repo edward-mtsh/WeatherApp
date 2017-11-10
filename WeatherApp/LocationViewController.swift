@@ -110,11 +110,6 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
             weather -> Void in
             self.pupulateUIView(weather: weather)
             }
-        .then
-            {
-            _ -> Void in
-                
-            }
         .always
             {
             self.hideBusyView()
@@ -146,7 +141,6 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
             self._weatherImage.image = UIImage(data:data as Data)
             }
         }
-    
     
     @IBAction func onRefreshTapped(_ sender: Any)
         {

@@ -101,14 +101,19 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
             }
         firstly
             {
-            _ -> Promise<ResponseData> in
+            _ -> Promise<Weather> in
             self.showBusyView()
             return(server?.loadWeatherForCurrentLocation(latitude:latitude, longitude:longitude))!
             }
         .then
             {
-            result -> Void in
-            self.pupulateUIView(response: result)
+            weather -> Void in
+            self.pupulateUIView(weather: weather)
+            }
+        .then
+            {
+            _ -> Void in
+                
             }
         .always
             {
@@ -121,12 +126,17 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
             }
         }
     
-    func pupulateUIView(response:ResponseData)
+    func pupulateUIView(weather:Weather)
         {
-        self._areaLabel.text = response.area
-        self._maxTemperatureLabel.text = "max \(response.maxTemparature) °C"
-        self._minTemperatureLabel.text = "min \(response.minTemparature) °C"
-        if let imageUrl = NSURL(string: response.iconURL) as URL?
+        self._areaLabel.text = weather.area
+        self._maxTemperatureLabel.text = "max \(weather.maximumTemparature) °C"
+        self._minTemperatureLabel.text = "min \(weather.minimumTemparature) °C"
+        guard let iconURL = self.server?.iconURL else
+            {
+            return
+            }
+        let iconUrl = "\(iconURL)\(weather.iconURL).png"
+        if let imageUrl = NSURL(string: iconUrl) as URL?
             {
             guard let data = NSData(contentsOf:imageUrl) else
                 {
@@ -136,6 +146,7 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
             self._weatherImage.image = UIImage(data:data as Data)
             }
         }
+    
     
     @IBAction func onRefreshTapped(_ sender: Any)
         {

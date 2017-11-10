@@ -12,61 +12,56 @@ import AlamofireSwiftyJSON
 import PromiseKit
 import CocoaLumberjack
 
-/*
- I'm using this class to call the API server. Usually using the Swagger will eleminate all
- this value key code that i wrote. Going forward the swagger is the best approach for this, so that
- the code will be much easier to maintain
- */
-
 class Server: NSObject
     {
     let weatherAPIKey = "829d35cfa7c8531ccb8eff874bf1e3bb"
     let baseUrl = "http://api.openweathermap.org/data/2.5/"
     let iconURL = "http://openweathermap.org/img/w/"
-    var responseData:ResponseData?
 
-    func loadWeatherForCurrentLocation(latitude: String, longitude: String) -> Promise<ResponseData>
+    func loadWeatherForCurrentLocation(latitude: String, longitude: String) -> Promise<Weather>
         {
-        let (promise, fulfill, reject) = Promise<ResponseData>.pending()
+        let (promise, fulfill, reject) = Promise<Weather>.pending()
         let base = self.baseUrl
         let path = "weather?lat=\(latitude)&lon=\(longitude)&units=metric&appid=\(self.weatherAPIKey)"
         let urlPath = base + path
 
-        Alamofire.request(urlPath).responseSwiftyJSON
+        Alamofire.request(urlPath).responseJSON
             {
             response in
-            DDLogInfo(response.debugDescription)
-            if response.result.isSuccess
+             if response.result.isSuccess
                 {
-                let result = response.result.value
-                if let weatherList = result?["weather"].array
+                if let result = response.result.value as? [String : Any]
                     {
-                    let weather = weatherList.first
-                    if let icon = weather?["icon"].rawString()
+                    if let result = Weather(jsonDictionary: result)
                         {
-                        self.responseData?.iconURL = self.iconURL + icon + ".png"
+                        fulfill(result)
                         }
                     }
-                let temperature = result?["main"].dictionary
-                if let max = temperature?["temp_max"]?.rawString()
-                    {
-                    self.responseData?.maxTemparature = max
-                    }
-                if let min = temperature?["temp_min"]?.rawString()
-                    {
-                   self.responseData?.minTemparature = min
-                    }
-                if let area = result?["name"].rawString()
-                    {
-                   self.responseData?.area = area
-                    }
-                fulfill(self.responseData!)
                 }
             else
                 {
                 if let error = response.error
                     {
                     reject(error)
+                    }
+                }
+            }
+        return(promise)
+        }
+    
+    func loadWeatherImage(iconName:String) -> Promise<UIImage>
+        {
+        let (promise, fulfill, reject) = Promise<UIImage>.pending()
+        let baseURL = iconURL
+        let path = iconName
+        let urlPath = baseURL + path
+        if let imageUrl = NSURL(string: urlPath) as URL?
+            {
+            if let data = NSData(contentsOf:imageUrl)
+                {
+                if let image = UIImage(data:data as Data)
+                    {
+                    fulfill(image)
                     }
                 }
             }

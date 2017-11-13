@@ -21,6 +21,7 @@
 		928DD7A41F6C0A83000F8879 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928DD7A31F6C0A83000F8879 /* Weather.swift */; };
 		AA83AF4803FD1FE3F05A6CEC /* Pods_WeatherAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AE40FB52527D34D70F0FFE8 /* Pods_WeatherAppTests.framework */; };
 		FD8C894F1FAB23FC00B7BDBB /* SwinjectStoryboard+Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8C894E1FAB23FC00B7BDBB /* SwinjectStoryboard+Setup.swift */; };
+		FDFA62221FB9888700005C03 /* MessageLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDFA62211FB9888700005C03 /* MessageLibrary.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		EE7E001130F2CFA6349ED665 /* Pods-WeatherAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherAppUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeatherAppUITests/Pods-WeatherAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		F72D8AE757E0B273BB9D464F /* Pods-WeatherAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherAppUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WeatherAppUITests/Pods-WeatherAppUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FD8C894E1FAB23FC00B7BDBB /* SwinjectStoryboard+Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwinjectStoryboard+Setup.swift"; sourceTree = "<group>"; };
+		FDFA62211FB9888700005C03 /* MessageLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageLibrary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 		928DD79E1F6BEAFB000F8879 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				FDFA62211FB9888700005C03 /* MessageLibrary.swift */,
 				928DD7701F6BE5E3000F8879 /* AppDelegate.swift */,
 				928DD79F1F6BEB12000F8879 /* Server.swift */,
 				928DD7A31F6C0A83000F8879 /* Weather.swift */,
@@ -508,6 +511,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				926F5B781F6E8FCC00E6547C /* BaseViewController.swift in Sources */,
+				FDFA62221FB9888700005C03 /* MessageLibrary.swift in Sources */,
 				FD8C894F1FAB23FC00B7BDBB /* SwinjectStoryboard+Setup.swift in Sources */,
 				928DD7731F6BE5E3000F8879 /* LocationViewController.swift in Sources */,
 				928DD7A41F6C0A83000F8879 /* Weather.swift in Sources */,

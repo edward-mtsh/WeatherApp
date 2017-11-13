@@ -28,7 +28,7 @@ class Server: NSObject
         Alamofire.request(urlPath).responseJSON
             {
             response in
-             if response.result.isSuccess
+            if response.result.isSuccess
                 {
                 if let result = response.result.value as? [String : Any]
                     {
@@ -36,10 +36,6 @@ class Server: NSObject
                         {
                         fulfill(result)
                         }
-                    }
-                if let error = response.error
-                    {
-                    reject(error)
                     }
                 }
             else

@@ -41,18 +41,6 @@ class BaseViewController: UIViewController
         self.view.addConstraint(NSLayoutConstraint(item: view, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint(item: view, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 1.0, constant: 0.0))
         }
-    
-    func showAlert(title:String, message:String)
-        {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
-        self.present(alertController, animated: true, completion: nil)
-        }
-    
-    func onMainThread(block:@escaping (Void) -> Void)
-        {
-        DispatchQueue.main.async(execute: block)
-        }
 
     override func didReceiveMemoryWarning()
         {

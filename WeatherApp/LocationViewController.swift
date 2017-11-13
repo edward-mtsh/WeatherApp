@@ -20,6 +20,7 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
     @IBOutlet private weak var _areaLabel: UILabel!
     @IBOutlet private weak var _weatherImage: UIImageView!
     
+    let messageLibrary = MessageLibrary.sharedInstance
     private var _locationManager:CLLocationManager?
     private var _latitude:String?
     private var _longitude:String?
@@ -49,7 +50,7 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
         {
         guard CLLocationManager.locationServicesEnabled() else
             {
-            self.showAlert(title: "Access to Location", message:"Access to location is required for the application to function, please go to settings and turn it on and then click the refresh button")
+            messageLibrary.presentAlert(controller: self, title: "Access to Location", message: .locationAccess)
             return
             }
         guard canAccessLocation() else
@@ -72,7 +73,7 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
         {
         guard CLLocationManager.authorizationStatus() != .denied else
             {
-            self.showAlert(title: "Access to Location", message:"Access to location is required for the application to function, please go to settings and allow the app to access your location")
+            messageLibrary.presentAlert(controller: self, title: "Access to Location", message: .locationAccess)
             return(false)
             }
         return(true)
@@ -122,15 +123,15 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
         .catch
             {
             error in
-            self.showAlert(title: "Weather", message: "Something went wrong, please try again later")
+            self.messageLibrary.presentAlert(controller: self, title: "Weather", message: .serverError)
             }
         }
     
     func pupulateUIView(weather:Weather)
         {
         self._areaLabel.text = weather.area
-        self._maxTemperatureLabel.text = "max \(weather.maximumTemparature) °C"
-        self._minTemperatureLabel.text = "min \(weather.minimumTemparature) °C"
+        self._maxTemperatureLabel.text = "max \(weather.maximumTemperature) °C"
+        self._minTemperatureLabel.text = "min \(weather.minimumTemperature) °C"
         guard let iconURL = self.server?.iconURL else
             {
             return

@@ -20,7 +20,6 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
     @IBOutlet private weak var _areaLabel: UILabel!
     @IBOutlet private weak var _weatherImage: UIImageView!
     
-    let messageLibrary = MessageLibrary.sharedInstance
     private var _locationManager:CLLocationManager?
     private var _latitude:String?
     private var _longitude:String?
@@ -50,7 +49,7 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate
         {
         guard CLLocationManager.locationServicesEnabled() else
             {
-            messageLibrary.presentAlert(controller: self, title: "Access to Location", message: .locationAccess)
+            self.messageLibrary.presentAlert(controller: self, title: "Access to Location", message: .locationAccess)
             return
             }
         guard canAccessLocation() else

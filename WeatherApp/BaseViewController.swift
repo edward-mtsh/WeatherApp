@@ -11,6 +11,7 @@ import UIKit
 class BaseViewController: UIViewController
     {
     private var _activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    let messageLibrary = MessageLibrary.sharedInstance
     
     override func viewDidLoad()
         {

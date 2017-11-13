@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Weather.swift
 //  WeatherApp
 //
 //  Created by Edward Mtshweni on 2017/09/15.
@@ -11,8 +11,8 @@ import CocoaLumberjack
 
 class Weather
     {
-    var minimumTemparature:Double
-    var maximumTemparature:Double
+    var minimumTemperature:Double
+    var maximumTemperature:Double
     var area:String
     var iconURL:String
     
@@ -28,8 +28,8 @@ class Weather
             DDLogError("Error: Invalid json dictionary")
             return(nil)
             }
-        self.minimumTemparature = minimumTemperature
-        self.maximumTemparature = maximumTemperature
+        self.minimumTemperature = minimumTemperature
+        self.maximumTemperature = maximumTemperature
         self.iconURL = iconURL
         self.area = name
         }

@@ -15,7 +15,9 @@ extension SwinjectStoryboard
         defaultContainer.storyboardInitCompleted(LocationViewController.self)
             { r, c in
             c.server = r.resolve(Server.self)
+          
             }
+        defaultContainer.register(Server.self) { _ in Server() }
         defaultContainer.register(Server.self) { _ in Server() }
         }
     }

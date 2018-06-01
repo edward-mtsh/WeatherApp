@@ -9,5 +9,8 @@
 import Foundation
 
 protocol WeatherPresentable {
+    var view: WeatherPresenterViewable?{get set}
+    func onFetchWeatherSuccess(with showcaseApps: Weather)
+    func onFetchWeatherFailure(with error: Error)
     func loadWeatherForCurrentLocation(latitude: String, longitude: String)
 }

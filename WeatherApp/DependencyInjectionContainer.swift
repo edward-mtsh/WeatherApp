@@ -9,20 +9,20 @@
 import Foundation
 import Swinject
 
-class DependencyInjectionContainer {
-    var container: Container? {
-        let injection = Container()
-        injection.register(WeatherPresenterViewable.self) { r in
-        let locationViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LocationViewController") as! LocationViewController
-        let weatherPresenter = WeatherPresenter()
-        let weatherInteractor = WeatherInteractor()
-        let weatherServive = WeatherService()
-        weatherInteractor.weatherPresenter = weatherPresenter
-        weatherInteractor.weatherService = weatherServive
-        weatherPresenter.interacter = weatherInteractor
-        weatherPresenter.presenter = locationViewController
-        return locationViewController
+struct DependencyContainer {
+    
+    static func container() -> Container {
+        let container = Container()
+        
+        container.register(WeatherPresentable.self) { r in
+            let weatherPresenter = WeatherPresenter()
+            let weatherInteractor = WeatherInteractor()
+            let weatherServive = WeatherService()
+            weatherInteractor.weatherPresenter = weatherPresenter
+            weatherInteractor.weatherService = weatherServive
+            weatherPresenter.interacter = weatherInteractor
+            return weatherPresenter
         }
-    return injection
+        return container
     }
 }

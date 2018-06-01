@@ -10,7 +10,7 @@ import Foundation
 import PromiseKit
 
 class WeatherInteractor: WeatherInteractorable {
-    var weatherPresenter: WeatherPresenterInteractable?
+    var weatherPresenter: WeatherPresentable?
     var weatherService: WeatherServiceInteractable?
     
     func loadWeatherForCurrentLocation(latitude: String, longitude: String) {

@@ -9,22 +9,18 @@
 import Foundation
 
 class WeatherPresenter: WeatherPresentable {
-    var presenter: WeatherPresenterViewable?
+    var view: WeatherPresenterViewable?
     var interacter: WeatherInteractorable?
     
-    func loadWeatherForCurrentLocation(latitude: String, longitude: String) {
-        self.interacter?.loadWeatherForCurrentLocation(latitude: latitude, longitude: longitude)
-    }
-}
-
-extension WeatherPresenter: WeatherPresenterInteractable {
-    
     func onFetchWeatherSuccess(with weather: Weather) {
-       // self.weatherPresenterViewable
-        self.presenter?.showOnSuccess(with: weather)
+        self.view?.showOnSuccess(with: weather)
     }
     
     func onFetchWeatherFailure(with error: Error) {
-        self.presenter?.showOnFailure(with: error)
+        self.view?.showOnFailure(with: error)
+    }
+    
+    func loadWeatherForCurrentLocation(latitude: String, longitude: String) {
+        self.interacter?.loadWeatherForCurrentLocation(latitude: latitude, longitude: longitude)
     }
 }

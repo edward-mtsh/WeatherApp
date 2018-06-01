@@ -22,12 +22,18 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate {
     private var _locationManager:CLLocationManager?
     private var _latitude:String?
     private var _longitude:String?
-    internal var server:Server?
-    var presenter: WeatherPresentable?
+    private var presenter: WeatherPresentable?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.injectDependencies()
         self.initDate()
+    }
+    
+    func injectDependencies() {
+        let dependancyContainer = DependencyContainer.container()
+        self.presenter = dependancyContainer.resolve(WeatherPresentable.self)
+        self.presenter?.view = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -39,7 +45,7 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM yyyy"
         let formatedDate = formatter.string(from: date)
-       // self._dateTimeLabel.text = "Today, \(formatedDate)"
+        self._dateTimeLabel.text = "Today, \(formatedDate)"
     }
     
     func requestAccessToLocation() {
@@ -74,7 +80,6 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate {
         self._latitude =  String(location.coordinate.latitude)
         self._longitude = String(location.coordinate.longitude)
         self._locationManager?.stopUpdatingLocation()
-        //self.loadWeatherForCurrentLocation()
         guard let latitude = self._latitude else {
             DDLogError("Error: Latitude is empty")
             return
@@ -83,40 +88,15 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate {
             DDLogError("Error: Logitude is empty")
             return
         }
+        self.showBusyView()
         self.presenter?.loadWeatherForCurrentLocation(latitude: latitude, longitude: longitude)
-    }
-    
-    func loadWeatherForCurrentLocation() {
-        guard let latitude = self._latitude else {
-            DDLogError("Error: Latitude is empty")
-            return
-        }
-        guard let longitude = self._longitude else {
-            DDLogError("Error: Logitude is empty")
-            return
-        }
-        firstly {
-            _ -> Promise<Weather> in
-            self.showBusyView()
-            return(server?.loadWeatherForCurrentLocation(latitude:latitude, longitude:longitude))!
-        } .then {
-            weather -> Void in
-            self.pupulateUIView(weather: weather)
-        } .always {
-            self.hideBusyView()
-        } .catch {
-            error in
-            self.messageLibrary.presentAlert(controller: self, title: "Weather", message: .serverError)
-        }
     }
     
     func pupulateUIView(weather:Weather) {
         self._areaLabel.text = weather.area
         self._maxTemperatureLabel.text = "max \(weather.maximumTemperature) °C"
         self._minTemperatureLabel.text = "min \(weather.minimumTemperature) °C"
-        guard let iconURL = self.server?.iconURL else{
-            return
-        }
+        let iconURL = "http://openweathermap.org/img/w/"
         let iconUrl = "\(iconURL)\(weather.iconURL).png"
         if let imageUrl = NSURL(string: iconUrl) as URL? {
             guard let data = NSData(contentsOf:imageUrl) else {
@@ -127,10 +107,6 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate {
         }
     }
     
-    @IBAction func testCrach(_ sender: Any){
-        Crashlytics.sharedInstance().crash()
-    }
-    
     @IBAction func onRefreshTapped(_ sender: Any) {
         self.requestAccessToLocation()
     }
@@ -139,10 +115,12 @@ class LocationViewController: BaseViewController, CLLocationManagerDelegate {
 extension LocationViewController: WeatherPresenterViewable {
 
     func showOnSuccess(with weather: Weather) {
+        self.hideBusyView()
         self.pupulateUIView(weather: weather)
     }
     
     func showOnFailure(with error: Error) {
+        self.hideBusyView()
         self.messageLibrary.presentAlert(controller: self, title: "Weather", message: .serverError)
     }
 }
